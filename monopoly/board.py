@@ -1,3 +1,6 @@
+from monopoly.player import AbortInvestment, NotEnoughMoney, OutOfMoney
+
+
 class Board:
     def __init__(self, players, properties, bonus=100):
         self.players = {p: -1 for p in players}
@@ -19,3 +22,15 @@ class Board:
 
     def remove(self, player):
         del self.players[player]
+
+    def turn(self, player, steps):
+        real_state = self.move(player, steps)
+
+        try:
+            real_state.deal(player)
+        except AbortInvestment:
+            pass
+        except NotEnoughMoney:
+            pass
+        except OutOfMoney:
+            self.remove(player)

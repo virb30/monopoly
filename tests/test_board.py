@@ -1,4 +1,5 @@
 from monopoly import Board, Player, RealState
+from monopoly.player import Demanding
 
 
 def test_init():
@@ -35,5 +36,51 @@ def test_remove():
 
     b.remove(p)
     assert len(b.players) == 0
+
+
+def test_turn():
+    p = Player(300)
+    r = RealState(100, 10)
+    b = Board([p], [r])
+
+    b.turn(p, 1)
+
+    assert r.owner_is(p)
+    assert p.balance == 200
+
+
+def test_turn_abort_investment():
+    p = Player(300, strategy=Demanding())
+    r = RealState(100, 50)
+    b = Board([p], [r])
+
+    b.turn(p, 1)
+
+    assert not r.has_owner()
+    assert p.balance == 300
+
+
+def test_turn_not_enough_money():
+    p = Player(0)
+    r = RealState(100, 50)
+    b = Board([p], [r])
+
+    b.turn(p, 1)
+
+    assert not r.has_owner()
+    assert p.balance == 0
+
+
+def test_turn_out_of_money():
+    p1 = Player(200)
+    p2 = Player(49)
+    r = RealState(100, 50, owner=p1)
+    b = Board([p1, p2], [r])
+
+    b.turn(p2, 1)
+
+    assert p1 in b.players
+    assert p2 not in b.players
+
 
 

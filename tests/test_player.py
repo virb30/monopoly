@@ -93,3 +93,15 @@ def test_invest_gambler_abort(mocker):
     with pytest.raises(AbortInvestment):
         p.invest(price=100, rent=10)
 
+
+def test_str():
+    p = Player(0)
+    assert str(p) == 'Impulsive'
+
+
+def test_factory():
+    players = Player.from_strategies(300)
+    names = [str(p) for p in players]
+    assert names == ['Impulsive', 'Demanding', 'Cautious', 'Gambler']
+
+

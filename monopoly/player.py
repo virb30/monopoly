@@ -13,24 +13,32 @@ class AbortInvestment(Exception):
     pass
 
 
-class Impulsive:
+class Strategy:
+    def __str__(self):
+        return self.__class__.__name__
+
+
+class Impulsive(Strategy):
     def __call__(self, *args, **kwargs):
         return True
 
 
-class Demanding:
+class Demanding(Strategy):
     def __call__(self, balance, price, rent):
         return rent > 50
 
 
-class Cautious:
+class Cautious(Strategy):
     def __call__(self, balance, price, rent):
         return balance - price >= 80
 
 
-class Gambler:
+class Gambler(Strategy):
     def __call__(self, balance, price, rent):
         return random.choice((True, False))
+
+
+STRATEGIES = (Impulsive(), Demanding(), Cautious(), Gambler())
 
 
 class Player:
@@ -57,3 +65,9 @@ class Player:
 
         return self.pay(price)
 
+    def __str__(self):
+        return str(self.strategy)
+
+    @classmethod
+    def from_strategies(cls, balance):
+        return [cls(balance, strategy=s) for s in STRATEGIES]
