@@ -3,8 +3,6 @@ import pytest
 from monopoly.player import Player, OutOfMoney, NotEnoughMoney, Impulsive, AbortInvestment, Demanding, Cautious, Gambler
 
 
-# Todo: repr
-
 def test_init():
     p = Player(300)
     assert p
