@@ -21,6 +21,10 @@ class Board:
         return len(self.properties)
 
     def remove(self, player):
+        for rs in self.properties:
+            if rs.owner_is(player):
+                rs.foreclose()
+
         del self.players[player]
 
     def turn(self, player, steps):
